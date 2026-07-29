@@ -31,8 +31,9 @@ const handleWebhook = catchAsync(async (req: Request, res: Response) => {
 });
 
 const setWebhook = catchAsync(async (req: Request, res: Response) => {
-  const hostUrl = req.protocol + '://' + req.get('host');
-  const webhookUrl = `${hostUrl}/api/v1/bot/webhook`;
+  const host = req.get('host') || 'my-pixel-extractor-bot.vercel.app';
+  const protocol = 'https';
+  const webhookUrl = `${protocol}://${host}/api/v1/bot/webhook`;
   const result = await BotService.setWebhook(webhookUrl);
 
   sendResponse(res, {
