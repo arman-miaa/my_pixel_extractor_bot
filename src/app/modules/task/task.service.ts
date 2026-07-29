@@ -57,8 +57,53 @@ const getTaskById = async (taskId: string): Promise<ITask | null> => {
   return await Task.findOne({ taskId });
 };
 
+const updateTaskStatus = async (
+  taskId: string,
+  status: 'pending' | 'processing' | 'completed' | 'failed'
+): Promise<ITask | null> => {
+  const task = await Task.findOneAndUpdate(
+    { taskId },
+    { status },
+    { new: true }
+  );
+
+  if (!task) {
+    throw new AppError(404, 'Task not found');
+  }
+
+  if (status === 'completed') {
+    const user = await User.findOneAndUpdate(
+      { telegramId: task.telegramId },
+      {
+        $inc: {
+          totalSuccess: 1,
+          successToday: 1,
+          inProgressCount: -1,
+        },
+      },
+      { new: true }
+    );
+
+    await User.updateOne(
+      { telegramId: task.telegramId, 'recentTasks.taskId': taskId },
+      { $set: { 'recentTasks.$.status': 'completed' } }
+    );
+
+    const { BotService } = await import('../bot/bot.service');
+    await BotService.sendTaskCompletionNotification({
+      taskId: task.taskId,
+      username: user?.username || '',
+      serviceName: task.title,
+      costPoints: task.costPoints,
+    });
+  }
+
+  return task;
+};
+
 export const TaskService = {
   createTask,
   getMyTasks,
   getTaskById,
+  updateTaskStatus,
 };

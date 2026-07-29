@@ -32,7 +32,7 @@ const userSchema = new Schema<IUser, UserModel>(
     },
     mainBalance: {
       type: Number,
-      default: 0,
+      default: 10,
     },
     referralBalance: {
       type: Number,

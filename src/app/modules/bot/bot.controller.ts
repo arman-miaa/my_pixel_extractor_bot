@@ -14,6 +14,19 @@ const getStatus = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const broadcastToChannel = catchAsync(async (req: Request, res: Response) => {
+  const { title, content } = req.body;
+  await BotService.sendChannelBroadcast(title || 'Announcement', content);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Broadcast sent to channel successfully!',
+    data: null,
+  });
+});
+
 export const BotController = {
   getStatus,
+  broadcastToChannel,
 };

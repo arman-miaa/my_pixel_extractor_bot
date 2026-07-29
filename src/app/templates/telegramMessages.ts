@@ -38,3 +38,46 @@ export const buildReferralMessage = (user: IUser, botUsername: string): string =
 
 Share this link with your friends to earn points!`;
 };
+
+export const buildTaskCompletionMessage = (task: {
+  taskId: string;
+  username?: string;
+  serviceName?: string;
+  costPoints?: number;
+}): string => {
+  const userDisplay = task.username ? `@${task.username}` : 'Anonymous User';
+  const serviceDisplay = task.serviceName || 'Extract Offer Link';
+  const costDisplay = task.costPoints !== undefined ? task.costPoints : 1;
+
+  return `🎉 *Order Successfully Processed!*
+
+🆔 *Task ID:* #${task.taskId}
+👤 *User:* ${userDisplay}
+📦 *Service:* 🌟 ${serviceDisplay}
+💰 *Cost:* ${costDisplay} Credit
+
+✅ *Status:* Completed`;
+};
+
+export const buildBroadcastMessage = (title: string, content: string): string => {
+  return `📢 *${title}*
+
+${content}
+
+Thank you for your continued support!`;
+};
+
+export const buildForceJoinMessage = (firstName: string): string => {
+  return `⚠️ *Mandatory Channel & Group Join Required!*
+
+Hello ${firstName}! 👋
+
+To use this bot, you must join our official **Telegram Group** and **Telegram Channel**.
+
+1. Join **[CHAT] Arman Pixel Extractor** Group
+2. Join **[APP] Arman Pixel Extractor** Channel
+
+After joining both, click the **🔄 Verify Join** button below to continue!`;
+};
+
+

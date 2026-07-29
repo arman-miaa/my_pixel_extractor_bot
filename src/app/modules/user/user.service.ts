@@ -21,7 +21,7 @@ const authOrCreateTelegramUser = async (payload: {
         firstName: payload.firstName || '',
         lastName: payload.lastName || '',
         referredBy: payload.referredBy || null,
-        mainBalance: 0,
+        mainBalance: 10,
         referralBalance: 0,
         eligibleReferrals: 0,
         notEligibleReferrals: 0,

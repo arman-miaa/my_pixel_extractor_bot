@@ -14,5 +14,7 @@ export default {
   telegram: {
     bot_token: process.env.TELEGRAM_BOT_TOKEN || '',
     bot_username: process.env.BOT_USERNAME || 'ArmanBot',
+    chat_group_id: process.env.TELEGRAM_CHAT_GROUP_ID || '',
+    app_channel_id: process.env.TELEGRAM_APP_CHANNEL_ID || '',
   },
 };
