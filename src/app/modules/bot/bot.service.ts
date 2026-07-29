@@ -189,6 +189,19 @@ const initializeBot = (): Telegraf | null => {
     });
   });
 
+  // Global Error Catch for Telegraf
+  bot.catch((err: any, ctx) => {
+    console.error(`❌ Telegraf error for ${ctx.updateType}:`, err);
+  });
+
+  // Fallback handler for unrecognized text messages
+  bot.on('text', async (ctx) => {
+    await ctx.reply(
+      '🤖 Option not recognized. Please use the menu buttons below or type /start.',
+      mainKeyboard
+    );
+  });
+
   bot.launch().then(() => {
     console.log('🤖 Telegram Bot launched successfully!');
   }).catch((err) => {
