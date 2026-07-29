@@ -4,9 +4,15 @@ import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import notFound from './app/middlewares/notFound';
 import routes from './app/routes';
 
+import { connectDB } from './app/db';
+
 const app: Application = express();
 
 // Middlewares
+app.use(async (req: Request, res: Response, next) => {
+  await connectDB();
+  next();
+});
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

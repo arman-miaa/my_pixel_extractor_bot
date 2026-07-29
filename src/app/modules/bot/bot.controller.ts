@@ -26,7 +26,26 @@ const broadcastToChannel = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const handleWebhook = catchAsync(async (req: Request, res: Response) => {
+  await BotService.handleWebhookUpdate(req, res);
+});
+
+const setWebhook = catchAsync(async (req: Request, res: Response) => {
+  const hostUrl = req.protocol + '://' + req.get('host');
+  const webhookUrl = `${hostUrl}/api/v1/bot/webhook`;
+  const result = await BotService.setWebhook(webhookUrl);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: `Telegram Webhook set successfully to ${webhookUrl}!`,
+    data: { webhookUrl: result },
+  });
+});
+
 export const BotController = {
   getStatus,
   broadcastToChannel,
+  handleWebhook,
+  setWebhook,
 };

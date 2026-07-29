@@ -302,11 +302,15 @@ const initializeBot = (): Telegraf | null => {
     );
   });
 
-  bot.launch().then(() => {
-    console.log('🤖 Telegram Bot launched successfully!');
-  }).catch((err) => {
-    console.error('❌ Failed to launch Telegram Bot:', err);
-  });
+  if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+    bot.launch().then(() => {
+      console.log('🤖 Telegram Bot launched successfully via Polling!');
+    }).catch((err) => {
+      console.error('❌ Failed to launch Telegram Bot:', err);
+    });
+  } else {
+    console.log('🤖 Telegram Bot running in Webhook mode for Serverless/Vercel.');
+  }
 
   process.once('SIGINT', () => bot.stop('SIGINT'));
   process.once('SIGTERM', () => bot.stop('SIGTERM'));
@@ -318,8 +322,31 @@ const getStatus = () => {
   return {
     isRunning: !!botInstance,
     username: config.telegram.bot_username,
+    mode: process.env.VERCEL || process.env.NODE_ENV === 'production' ? 'webhook' : 'polling',
     uptime: Math.floor((Date.now() - startTime) / 1000),
   };
+};
+
+const handleWebhookUpdate = async (req: any, res: any) => {
+  if (!botInstance) {
+    initializeBot();
+  }
+  if (botInstance) {
+    await botInstance.handleUpdate(req.body, res);
+  } else {
+    res.status(500).json({ error: 'Bot instance not initialized' });
+  }
+};
+
+const setWebhook = async (webhookUrl: string) => {
+  if (!botInstance) {
+    initializeBot();
+  }
+  if (!botInstance) {
+    throw new Error('Bot instance not initialized.');
+  }
+  await botInstance.telegram.setWebhook(webhookUrl);
+  return webhookUrl;
 };
 
 const sendTaskCompletionNotification = async (task: {
@@ -328,6 +355,9 @@ const sendTaskCompletionNotification = async (task: {
   serviceName?: string;
   costPoints?: number;
 }) => {
+  if (!botInstance) {
+    initializeBot();
+  }
   if (!botInstance) {
     console.warn('⚠️ Bot instance not initialized. Cannot send task completion notification.');
     return;
@@ -351,6 +381,9 @@ const sendTaskCompletionNotification = async (task: {
 
 const sendChannelBroadcast = async (title: string, content: string) => {
   if (!botInstance) {
+    initializeBot();
+  }
+  if (!botInstance) {
     throw new Error('Bot instance not initialized.');
   }
   const channelId = config.telegram.app_channel_id;
@@ -368,6 +401,8 @@ const sendChannelBroadcast = async (title: string, content: string) => {
 export const BotService = {
   initializeBot,
   getStatus,
+  handleWebhookUpdate,
+  setWebhook,
   sendTaskCompletionNotification,
   sendChannelBroadcast,
 };
