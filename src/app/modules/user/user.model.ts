@@ -36,7 +36,7 @@ const userSchema = new Schema<IUser, UserModel>(
     },
     referralBalance: {
       type: Number,
-      default: 0.80,
+      default: 0,
     },
     totalSuccess: {
       type: Number,
@@ -56,11 +56,11 @@ const userSchema = new Schema<IUser, UserModel>(
     },
     eligibleReferrals: {
       type: Number,
-      default: 3,
+      default: 0,
     },
     notEligibleReferrals: {
       type: Number,
-      default: 10,
+      default: 0,
     },
     pendingReferrals: {
       type: Number,

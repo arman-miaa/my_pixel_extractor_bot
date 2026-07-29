@@ -13,6 +13,6 @@ export default {
   },
   telegram: {
     bot_token: process.env.TELEGRAM_BOT_TOKEN || '',
-    bot_username: process.env.BOT_USERNAME || 'GeminiPixelExtractorBot',
+    bot_username: process.env.BOT_USERNAME || 'ArmanBot',
   },
 };

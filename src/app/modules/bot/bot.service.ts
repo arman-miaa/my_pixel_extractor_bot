@@ -46,7 +46,7 @@ const initializeBot = (): Telegraf | null => {
       });
 
       await ctx.reply(
-        `👋 Welcome to *[BOT] Gemini Pixel Extractor*, ${firstName}!\n\nUse the menu buttons below to manage your profile, task extractions, and referrals.`,
+        `👋 Welcome to *[BOT] Arman Bot*, ${firstName}!\n\nUse the menu buttons below to manage your profile, task extractions, and referrals.`,
         {
           parse_mode: 'Markdown',
           ...mainKeyboard,
@@ -167,7 +167,7 @@ const initializeBot = (): Telegraf | null => {
 
   // Handler for Credit History
   bot.hears(BOT_KEYBOARD_BUTTONS.CREDIT_HISTORY, async (ctx) => {
-    await ctx.reply('💰 *Credit History*\n\n• Initial Registration: +0.80 Referral Balance\n• Cost per Extract: -1 Point', {
+    await ctx.reply('💰 *Credit History*\n\n• Initial Registration: 0 Points\n• Per Eligible Referral: +0.50 Points\n• Cost per Extract: -1 Point', {
       parse_mode: 'Markdown',
       ...mainKeyboard,
     });
