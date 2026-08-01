@@ -13,6 +13,5 @@ export type ITask = {
   costPoints: number;
   createdAt?: Date;
   updatedAt?: Date;
-};
-// 
+}; 
 export type TaskModel = Model<ITask, Record<string, unknown>>;
